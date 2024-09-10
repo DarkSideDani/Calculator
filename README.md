@@ -6,7 +6,7 @@ DarkSideCalc is intended to be a demonstrative example of how to build a Python 
 
 ## Screenshot
 
-[PlaceHolder]
+[DarkSideCalc](https://imgur.com/ls62OJy)
 
 ## Requirements
 
