@@ -21,8 +21,30 @@ class PyCalcWindow(QMainWindow):
     """main window (GUI or view)."""
     def __init__(self):
         super().__init__()
-        self.setWindowTitle("DSD Calc ")
+        self.setWindowTitle("DSD Calc")
         self.setFixedSize(WINDOW_SIZE, WINDOW_SIZE)
+        
+        # Set the background color to black and text to white using stylesheet
+        self.setStyleSheet("""
+            QMainWindow {
+                background-color: black;
+            }
+            QLineEdit {
+                background-color: black;
+                color: white;
+                border: 2px solid gray;
+            }
+            QPushButton {
+                background-color: gray;
+                color: white;
+                font-size: 16px;
+                border-radius: 5px;
+            }
+            QPushButton:pressed {
+                background-color: darkgray;
+            }
+        """)
+
         self.generalLayout = QVBoxLayout()
         centralWidget = QWidget(self)
         centralWidget.setLayout(self.generalLayout)
