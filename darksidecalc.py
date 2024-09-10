@@ -2,31 +2,85 @@ import sys
 from functools import partial
 
 from PyQt6.QtCore import Qt
-from PyQt6.QtWidgets import (QApplication, QGridLayout, QLineEdit, QMainWindow, QPushButton, QVBoxLayout, QWidget, QLabel, QHBoxLayout, QWidget)
-
-# Creating the instance of QApplication
-app = QApplication([])
-# Creating the app's GUI
-window = QWidget()
-window.setWindowTitle("DarkSide Calculator")
-window.setGeometry(200,200,400,400)
-helloMsg = QLabel("<h1>DSD</h1>", parent=window) # Uses HTML elements
-helloMsg.move(60, 15) # Location of the helloMsg
-
-layout = QGridLayout()
-layout.addWidget(QPushButton("Button (0, 0)"), 0, 0)
-layout.addWidget(QPushButton("Button (0, 1)"), 0, 1)
-layout.addWidget(QPushButton("Button (0, 2)"), 0, 2)
-layout.addWidget(QPushButton("Button (1, 0)"), 1, 0)
-layout.addWidget(QPushButton("Button (1, 1)"), 1, 1)
-layout.addWidget(QPushButton("Button (1, 2)"), 1, 2)
-layout.addWidget(QPushButton("Button (2, 0)"), 2, 0)
-layout.addWidget(
-    QPushButton("Button (2, 1) + 2 Columns Span"), 2, 1, 1, 2
+from PyQt6.QtWidgets import (
+    QApplication,
+    QGridLayout,
+    QLineEdit,
+    QMainWindow,
+    QPushButton,
+    QVBoxLayout,
+    QWidget,
 )
-window.setLayout(layout)
 
-#Show the GUI
-window.show()
-#Run the app event loop
-sys.exit(app.exec())
+WINDOW_SIZE = 235
+DISPLAY_HEIGHT = 35
+BUTTON_SIZE = 40
+ERROR_MSG = "ERROR"
+
+class PyCalcWindow(QMainWindow):
+    """main window (GUI or view)."""
+    def __init__(self):
+        super().__init__()
+        self.setWindowTitle("DSD Calc ")
+        self.setFixedSize(WINDOW_SIZE, WINDOW_SIZE)
+        self.generalLayout = QVBoxLayout()
+        centralWidget = QWidget(self)
+        centralWidget.setLayout(self.generalLayout)
+        self.setCentralWidget(centralWidget)
+        self._createDisplay()
+        self._createButtons()
+        
+    def _createDisplay(self):
+        self.display = QLineEdit()
+        self.display.setFixedHeight(DISPLAY_HEIGHT)
+        self.display.setAlignment(Qt.AlignmentFlag.AlignRight)
+        self.display.setReadOnly(True)
+        self.generalLayout.addWidget(self.display)
+        
+    def _createButtons(self):
+        self.buttonMap = {}
+        buttonsLayout = QGridLayout()
+        keyBoard = [
+            ["7", "8", "9", "/", "C"],
+            ["4", "5", "6", "*", "("],
+            ["1", "2", "3", "-", ")"],
+            ["0", "00", ".", "+", "="],
+        ]
+
+        for row, keys in enumerate(keyBoard):
+            for col, key in enumerate(keys):
+                self.buttonMap[key] = QPushButton(key)
+                self.buttonMap[key].setFixedSize(BUTTON_SIZE, BUTTON_SIZE)
+                buttonsLayout.addWidget(self.buttonMap[key], row, col)
+
+        self.generalLayout.addLayout(buttonsLayout)
+        
+    def setDisplayText(self, text): # Set the display's text
+        self.display.setText(text)
+        self.display.setFocus()
+        
+    def displayText(self):
+        return self.display.text() # Get the display's Text
+    
+    def clearDisplay(self):
+        self.setDisplayText("") # Clear the display
+        
+        
+    def evaluateExpression(expression):
+        """Evaluate an expression (Model)."""
+        try:
+            result = str(eval(expression, {}, {}))
+        except Exception:
+            result = ERROR_MSG
+        return result
+
+
+def main():
+    """main function."""
+    pycalcApp = QApplication([])
+    pycalcWindow = PyCalcWindow()
+    pycalcWindow.show()
+    sys.exit(pycalcApp.exec())
+
+if __name__ == "__main__":
+    main()
