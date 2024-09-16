@@ -1,4 +1,5 @@
 import sys
+import requests
 from functools import partial
 
 from PyQt6.QtCore import Qt
@@ -91,11 +92,18 @@ class PyCalcWindow(QMainWindow):
 def evaluateExpression(expression):
     """Evaluate an expression (Model)."""
     try:
-        result = str(eval(expression, {}, {}))
-    except Exception:
-        result = ERROR_MSG
-    return result
-
+        # Send a POST request to the backend API with the expression
+        response = requests.post("http://127.0.0.1:5000/calculate", json={"expression": expression})
+        # Parse the JSON response
+        response_json = response.json()
+        # Return the result if successful, or an error message if something goes wrong
+        if 'result' in response_json:
+            return response_json['result']
+        else:
+            return ERROR_MSG
+    except Exception as e:
+        print("Error:", str(e)) # Error logger
+        return ERROR_MSG
 
 class PyCalc:
     """PyCalc's controller class."""
