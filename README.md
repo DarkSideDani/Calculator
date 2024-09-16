@@ -8,6 +8,11 @@ DarkSideCalc is intended to be a demonstrative example of how to build a Python 
 
 [DarkSideCalc](https://imgur.com/ls62OJy)
 
+## TODO
+
+- Implement a back-end + front-end for the app to further learn how API's work.
+
+
 ## Requirements
 
 For DarkSideCalc to work, you need to have [Python](https://www.python.org) >= 3.6.1. Then you need to install the PyQt6 library. You can do this by using `pip` in a Python virtual environment:
